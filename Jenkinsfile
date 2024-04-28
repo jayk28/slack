@@ -13,5 +13,10 @@ pipeline {
 		stage('Deployment'){
 		   steps {
 		sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
-			}}	
+			}}
+		stage('slack'){
+		   steps {
+		sh slackSend channel: '#devops', color: 'good', message: 'welcome', teamDomain: 'devops'
+			}}
+		
 }}
