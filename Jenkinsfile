@@ -1,31 +1,37 @@
 pipeline {
-	agent any
-	
-	parameters {
-		choice(name: 'ENVIRONMENT', choices: ['QA','UAT'], description: 'Pick Environment value')
-	}
-	stages {
-	    stage('Checkout') {
-	        steps {
-			checkout scm			       
-		      }}
-		stage('Build') {
-	           steps {
-			  sh '/home/devops/devops_tool/apache-maven-3.9.6/bin/mvn install'
-	                 }}
-		stage('Deployment'){
-		    steps {
-			script {
-			 if ( env.ENVIRONMENT == 'QA' ){
-        	sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
-        	echo "deployment has been done on QA!"
-			 }
-			elif ( env.ENVIRONMENT == 'UAT' ){
-    		sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
-    		echo "deployment has been done on UAT!"
-			}
-			echo "deployment has been done!"
-			fi
-			
-			}}}	
-}}
+    agent any 
+    
+    parameters {
+        choice(name: 'ENV', choices: ['QA', 'UAT'], description: 'Select the environment')
+    }
+    
+    triggers {
+        pollSCM '* * * * *'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '/home/devops/devops_tool/apache-maven-3.9.6/bin/mvn install'
+            }
+        }
+        stage('Deployment') {
+            steps {
+                script {
+                    if (env.ENV == 'QA') {
+                        sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
+                        echo "Deployment has been COMPLETED on QA!"
+                    } else if (env.ENV == 'UAT') {
+                        sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
+                        echo "Deployment has been done on UAT!"
+                    }
+                }
+            }
+        }
+    }
+}
