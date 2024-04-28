@@ -25,9 +25,13 @@ pipeline {
         	sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
         	echo "deployment has been COMPLETED on QA!"
 			 }
-			else ( env.ENV == 'UAT' ){
+			elif ( env.ENV == 'UAT' ){
     		sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
     		echo "deployment has been done on UAT!"
+			}	
+			else {
+    		echo "Nothing to Build!"
+				
 			}
 			}}}	
 }}
