@@ -2,7 +2,7 @@ pipeline {
     agent any 
     
     parameters {
-        choice(name: 'ENV', choices: ['QA', 'UAT'], description: 'Select the environment')
+        string defaultValue: 'DEV', name: 'ENV'
     }
     
     triggers {
