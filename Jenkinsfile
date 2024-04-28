@@ -16,7 +16,7 @@ pipeline {
 			}}
 		stage('slack'){
 		   steps {
-		sh slackSend channel: '#devops', color: 'good', message: 'welcome', teamDomain: 'devops'
+		  slackSend channel: '#devops', color: 'good', message: 'welcome', teamDomain: 'devops'
 			}}
 		
 }}
