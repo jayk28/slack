@@ -1,14 +1,9 @@
 pipeline {
-	agent any 
+	agent any
 	
 	parameters {
-  		string defaultValue: 'DEV', name: 'ENV'
+		choice(name: 'ENVIRONMENT', choices: ['QA','UAT'], description: 'Pick Environment value')
 	}
-	
-	triggers {
-  		pollSCM '* * * * *'
-	}
-	
 	stages {
 	    stage('Checkout') {
 	        steps {
@@ -21,17 +16,16 @@ pipeline {
 		stage('Deployment'){
 		    steps {
 			script {
-			 if ( env.ENV == 'QA' ){
+			 if ( env.ENVIRONMENT == 'QA' ){
         	sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
-        	echo "deployment has been COMPLETED on QA!"
+        	echo "deployment has been done on QA!"
 			 }
-			elif ( env.ENV == 'UAT' ){
+			elif ( env.ENVIRONMENT == 'UAT' ){
     		sh 'cp target/slack.war /home/devops/devops_tool/apache-tomcat-9.0.88/webapps'
     		echo "deployment has been done on UAT!"
-			}	
-			else {
-    		echo "Nothing to Build!"
-				
 			}
+			echo "deployment has been done!"
+			fi
+			
 			}}}	
 }}
